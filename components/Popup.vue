@@ -8,12 +8,28 @@
         <v-card-title class="text-center ml-3" promary-title>Add a New Project</v-card-title>
         <v-card-text>
           <v-form class="px-3" ref="form">
-            <v-text-field label="Title" v-model="title" prepend-icon="mdi-folder" :rules="inputRules"></v-text-field>
-            <v-textarea label="Information" v-model="content" prepend-icon="mdi-pencil" :rules="inputRules"></v-textarea>
+            <v-text-field
+              label="Title"
+              v-model="title"
+              prepend-icon="mdi-folder"
+              :rules="inputRules"
+            ></v-text-field>
+            <v-textarea
+              label="Information"
+              v-model="content"
+              prepend-icon="mdi-pencil"
+              :rules="inputRules"
+            ></v-textarea>
 
             <v-menu max-width="290">
               <template v-slot:activator="{ on }">
-                <v-text-field :value="formattedDate" label="Due date" prepend-icon="mdi-calendar-range" v-on="on" :rules="inputRules"></v-text-field>
+                <v-text-field
+                  :value="formattedDate"
+                  label="Due date"
+                  prepend-icon="mdi-calendar-range"
+                  v-on="on"
+                  :rules="inputRules"
+                ></v-text-field>
               </template>
               <v-date-picker v-model="due"></v-date-picker>
             </v-menu>
@@ -27,9 +43,9 @@
 </template>
 
 <script>
-import format from 'date-fns/format'
-import parseISO from 'date-fns/parseISO'
-import db from '../plugins/fb.js'
+import format from "date-fns/format";
+import parseISO from "date-fns/parseISO";
+import db from "../plugins/fb.js";
 
 export default {
   data() {
@@ -38,30 +54,32 @@ export default {
       title: "",
       content: "",
       due: null,
-      inputRules: [
-        v => v.length >= 3 || 'Minimum length is 3 characters'
-      ]
+      inputRules: [v => v.length >= 3 || "Minimum length is 3 characters"]
     };
   },
   methods: {
     submit() {
-      if(this.$refs.form.validate()){
+      if (this.$refs.form.validate()) {
         console.log(this.title, this.content);
         const project = {
           title: this.title,
           content: this.content,
-          due: format(parseISO(this.due), 'do MMM yyyy'),
-          person: 'The Net Ninja',
-          status: 'ongoing'
-        }
+          due: format(parseISO(this.due), "do MMM yyyy"),
+          person: "The Net Ninja",
+          status: "ongoing"
+        };
 
-        db.collection('projects').add(project).then(() => {console.log('added to db')})
+        db.collection("projects")
+          .add(project)
+          .then(() => {
+            console.log("added to db");
+          });
       }
     }
   },
   computed: {
     formattedDate() {
-      return this.due ? format(parseISO(this.due), 'do MMM yyyy') : ''
+      return this.due ? format(parseISO(this.due), "do MMM yyyy") : "";
     }
   }
 };
